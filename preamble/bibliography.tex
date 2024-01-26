@@ -1,0 +1,37 @@
+\usepackage[style=numeric, backend=biber, maxbibnames=99, maxcitenames=2]{biblatex}
+\addbibresource{references.bib}
+
+%ALLOW CITING AUTHORS
+\DeclareCiteCommand{\citeauthors}
+	{\usebibmacro{prenote}}
+	{\usebibmacro{citeindex}\printtext[bibhyperref]{\usebibmacro{author}}}
+	{\multicitedelim}
+	{\usebibmacro{postnote}}
+\DeclareCiteCommand{\citeshortauthor}
+	{\usebibmacro{prenote}}
+	{\usebibmacro{citeindex}\printtext[bibhyperref]{\printnames{shortauthor}}}
+	{\multicitedelim}
+	{\usebibmacro{postnote}}
+\DeclareDelimFormat{finalnamedelim}{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addspace\if@RTL‌{و}\else{and}\fi\space}
+\renewbibmacro*{name:andothers}{%
+	\ifboolexpr{test {\ifnumequal{\value{listcount}}{\value{liststop}}} and test \ifmorenames}
+		{\ifnumgreater{\value{liststop}}{1}{\finalandcomma}{}\printdelim{andothersdelim}\if@RTL‌{و همکاران}\else{et al.}\fi}
+		{}}
+\newcommand\citeaurhorfa[1]{\mbox{\citeshortauthor{#1}}\LTRfootnote{\citeauthors{#1}}}
+\renewcommand*{\mkbibcompletename}[1]{\noun{#1}}
+
+%BEAUTIFY CITATIONS
+\AtBeginDocument
+{
+	\preto\cite{\,}
+}
+
+%BACK MATTER PRINTING
+\let\originalprintbibliography\printbibliography
+\def\printbibliography
+{
+	\twocolumn\printglossary[type=English]\onecolumn
+	\twocolumn\LTRdblcol\printglossary[type=Acronyms]\onecolumn
+	\latin
+	\originalprintbibliography[heading=bibintoc, title={\raggedleft\rl{کتاب‌نامه}}]
+}

@@ -1,0 +1,30 @@
+%FORMATTING HEADINGS
+\def\ps@plain{\let\@mkboth\@gobbletwo\let\@oddhead\@empty\def\@oddfoot{\reset@font\Kayhan\hfil\thepage\hfil}\let\@evenhead\@empty\let\@evenfoot\@oddfoot}
+\def\@evenhead{\reset@font\Kayhan\thepage\hfil\leftmark}%
+\def\@oddhead{\reset@font\Kayhan\rightmark\hfil\thepage}%
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection\quad#1}}
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername~\thechapter\quad#1}{}}
+
+\titleformat{\chapter}[display]
+{\centering\huge\bfseries}
+{\centering\chaptertitlename\ \ifnum\thechapter>1{\tartibi{chapter}}\else{یکم}\fi}{20pt}{\Huge}
+
+\titlespacing*{\section}{0pt}{3\tabcolsep}{0pt}
+\titlespacing*{\subsection}{0pt}{1\tabcolsep}{0pt}
+\titlespacing*{\subsubsection}{0pt}{0ex}{0pt}
+
+%FIX CONTENT LIST DOTTED LINES
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3.0em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{4.5em}{4.895em}}
+\renewcommand*\l@figure{\@dottedtocline{1}{0.0em}{3.0em}}
+
+\AtBeginDocument
+{
+	\Name{chapter}{بخش}{blue}
+	\Name{contents}{فهرست بخش‌ها}{blue}
+	\Name{section}{زیر بخش}{blue}
+	\Name{subsection}{زیر بخش}{blue}
+	\Name{subsubsection}{زیر بخش}{blue}
+	\Name{line}{دستور}{blue}
+}

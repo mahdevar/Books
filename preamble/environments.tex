@@ -1,0 +1,347 @@
+%TWOCOLUMNS SIZE FIX
+%\appto\prepare@multicols
+%{
+%	\advance\hsize-\tabcolsep
+%	\advance\hsize-\fboxrule
+%}
+
+%GENERATE LESS PAGE OF FLOATS
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.75}
+\let\dblfloatpagefraction\floatpagefraction
+\let\topfraction\floatpagefraction
+\let\dbltopfraction\floatpagefraction
+
+%DISTANCE BETWEEN FLOATS AND TEXT
+\columnsep=\tabcolsep
+\dblfloatsep=\columnsep
+\dbltextfloatsep=\columnsep
+\floatsep=\columnsep
+\intextsep=\columnsep
+\textfloatsep=\columnsep
+
+%ADJUST LISTS
+\appto\@listI
+{
+	\topsep=\z@
+	\parsep=\z@
+	\partopsep=\z@
+}
+
+\renewenvironment{quotation}
+{%
+	\list{}
+	{%
+		\itemindent=0pt%
+		\leftmargin=\tabcolsep%
+		\rightmargin=\leftmargin%
+		\parsep=\parskip%
+	}%
+	\item\relax\em%
+}
+{%
+	\endlist%
+}
+
+\FPeval\@floatopacity{0.5*\@opacity}
+
+\tcbset
+{
+	size=fbox,
+	nobeforeafter,
+	boxsep=\tabcolsep,
+	color/.style={colback=#1, colframe=#1},
+	enhanced jigsaw,
+	inline/.style=
+	{
+		arc=0pt,
+		boxrule=0pt,
+		opacityback=\@opacity,
+		breakable,
+		before skip=\tabcolsep,
+		after skip=0pt,
+	},
+	floats/.style=
+	{
+		arc=1mm,
+		boxrule=\fboxrule,
+		float,
+		floatplacement=t!,
+		opacityback=\@floatopacity,
+		opacityframe=0.5,
+	},
+}
+
+%MARK BETWEEN PARTS
+\SepMark{---}
+
+%UNIFY LISTS OF FLOATS
+\newcommand\printlistof[1]
+{
+	\chapter{\csname list#1name\endcsname}
+	\@mkboth{\csname list#1name\endcsname}{\csname list#1name\endcsname}
+	\@starttoc{\@nameuse{ext@#1}}
+}
+
+%TABLE OF ALL THINGS
+\def\@otherlists{}
+\preto\mainmatter
+{
+	\if@twocolumn
+		\@restonecoltrue
+		\onecolumn
+	\else
+		\@restonecolfalse
+	\fi
+	\pagenumbering{adadi}
+	\begingroup
+		\parskip=0pt
+		\onecolumn
+		\chapter{\contentsname}
+		\@mkboth{\contentsname}{\contentsname}
+		\@starttoc{toc}
+		\@otherlists
+	\endgroup
+	\if@restonecol\twocolumn\fi
+}
+
+%ENLARGING SUPERSCRIPTS
+\AtBeginDocument
+{
+	\def\@textsuperscript#1{\normalsize\raisebox{0.75ex}{\scriptsize#1}}
+}
+
+%RESET FLOATS LINE SPACING
+\@ifpackageloaded{setspace}
+{
+	\let\@xfloat\latex@xfloat
+}
+{}
+%\g@addto@macro\@floatboxreset{}
+
+%ALIGN FOOTNOTES
+\renewcommand{\@preamtwofmt}{\setlength{\hsize}{0.5\hsize - 0.5\tabcolsep}\advance\leftskip1em\advance\parindent-1em\leavevmode}
+\renewcommand{\@twocolLTRfootfmt}[1]{\@preamtwofmt{\makebox[1em][r]{\textsuperscript{\@thefnmark}}\foottextfont\textcolor{footnote}{#1}\par}\allowbreak}
+\renewcommand{\thefootnote}{\textcolor{footnote}{\arabic{footnote}}}
+
+\definecolor{footnote}{RGB}{0, 50, 150}
+
+\AtBeginDocument
+{
+	%RESIZE FOOTNOTE RULE
+	\def\footnoterule
+	{%
+		{\color{footnote}\hrule \@width \hsize}%
+	}
+}
+
+%ENVIRONMENTS FOOTNOTES
+\newcounter{EndNoteCounter}
+\newcounter{EndNoteSeries}
+
+\newcommand\EndNoteMark[1]{\addtocounter{EndNoteCounter}{#1}{\color{footnote}\textsuperscript{\hyperlink{\roman{EndNoteSeries}@\roman{EndNoteCounter}}{\Abjad{EndNoteCounter}}}}\addtocounter{EndNoteCounter}{-#1}}
+\newcommand\NewNoteMark{\stepcounter{EndNoteCounter}\EndNoteMark{0}}
+\newcommand\EndNoteText[1]{\listgadd{\EndNoteCounterText}{#1}}
+\newcommand\EndNote[1]{\NewNoteMark\EndNoteText{#1}}
+
+\newcommand{\WriteFootnotes}
+{%
+	\ifnum\value{EndNoteCounter}>0%
+		\parskip=0pt%
+		\par%
+		\footnotesize%
+		\advance\rightskip\tabcolsep%
+		\advance\parindent-\tabcolsep%
+		\setcounter{EndNoteCounter}{0}%
+		\vskip\skip\@mpfootins%
+%		\footnoterule%
+		\color{footnote}%
+		\renewcommand*{\do}[1]{\makebox[\tabcolsep][r]{\stepcounter{EndNoteCounter}\raisebox{\ht\strutbox}{\hypertarget{\roman{EndNoteSeries}@\roman{EndNoteCounter}}{}}\textsuperscript{\Abjad{EndNoteCounter}}}##1\par}%
+		\dolistloop{\EndNoteCounterText}%
+		\gdef\EndNoteCounterText{}%
+		\setcounter{EndNoteCounter}{0}%
+		\stepcounter{EndNoteSeries}%
+	\fi%
+}
+
+%ADD SPACE TO ALL ENVIRONMENTS LISTS AFTER EACH CHAPTER
+\def\UsedEnvironment{}
+\def\Environments{}
+
+\let\original@makechapterhead\@makechapterhead
+\renewcommand{\@makechapterhead}[1]
+{
+	\original@makechapterhead{#1}
+	\renewcommand*{\do}[1]
+	{
+		\addtocontents{##1}{{\protect\addvspace{10\p@}}}
+	}
+	\dolistloop{\Environments}
+}
+
+\definecolor{environment}{RGB}{0, 50, 0}
+
+%SPECIAL ENVIRONMENT FOR PROGRAMS STRUCTURES
+\newtcolorbox{structure}
+{
+	size=fbox,
+	arc=1mm,
+	beforeafter skip=\fboxrule+\tabcolsep,
+	boxrule=\fboxrule,
+	boxsep=\tabcolsep,
+	color=environment,
+	enhanced jigsaw,
+	interior style={pattern=checkerboard, pattern color=environment},
+	opacityfill=\@opacity,
+	opacityframe=0.5,
+	width=\hsize,
+}
+\appto\structure{\disable@lines}
+
+%ADJUST HYPERREF TARGETS
+\renewcommand{\hypcapspace}{\baselineskip}
+
+%FORCE SAME PARAGRAPH SKIP IN FLOATS
+\newlength\@default@parindent
+\newlength\@default@parskip
+
+\AtBeginDocument
+{
+	\@default@parindent=\parindent
+	\@default@parskip=\parskip
+}
+
+\newcommand\StyleEnvironment[1]
+{
+	\csappto{#1}
+	{
+		\Kayhan
+		\parindent=\@default@parindent
+		\parskip=\@default@parskip
+		\enable@lines
+		\capstart
+		\let\word\wordtext
+	}
+	\cspreto{#1}{\colorlet{environment}{#1}}
+	\cspreto{end#1}
+	{
+		\WriteFootnotes
+		\let\word\@original@word
+		\disable@lines
+	}
+}
+
+\newcommand{\FloatEnvironment}[2]
+{
+	\renewenvironment{#1}
+	{
+		\captionsetup{type=#1}
+		\begin{tcolorbox}[floats, color=environment]
+	}
+	{
+		\end{tcolorbox}
+	}
+	\renewenvironment{#1*}
+	{
+		\captionsetup{type=#1}
+		\begin{tcolorbox}[floats, float*, width=\textwidth, color=environment]
+	}
+	{
+		\end{tcolorbox}
+	}
+	\StyleEnvironment{#1}
+	\StyleEnvironment{#1*}
+}
+
+\newcommand{\InlineEnvironment}[2]
+{
+	\renewenvironment{#1}
+	{
+		\captionsetup{type=#1}
+		\begin{tcolorbox}[inline, color=environment]
+	}
+	{
+		\end{tcolorbox}
+	}
+	\StyleEnvironment{#1}
+	\StyleEnvironment{#1*}
+}
+
+%MAKE NEW ENVIRONMENTS
+\newcommand{\NewEnvironment}[4][]
+{
+	\newfloat{#2}{b}{#2}[chapter]
+	\listadd{\Environments}{#2}
+	\definecolor{#2}{RGB}{#4}
+	\colorlet{#2*}{#2}
+	
+	\IfSubStr{#1}{Inline}
+		{\InlineEnvironment{#2}}
+		{\FloatEnvironment{#2}}
+
+	\expandafter\let\csname
+	l@#2\endcsname\l@figure
+
+	\Name{#2}{#3}{#2}
+	\Name{list#2}{فهرست #3‌ها}{#2}
+	\floatname{#2}{\csname#2name\endcsname}
+
+	\cspreto{#2}{\write\@mainaux{\listxadd{\string\UsedEnvironment}{#2}}}
+	\cspreto{#2*}{\write\@mainaux{\listxadd{\string\UsedEnvironment}{#2}}}
+
+	\IfSubStr{#1}{No List}
+	{}
+	{
+		\AtBeginDocument
+		{
+			\ifinlist{#2}{\UsedEnvironment}
+			{\appto\@otherlists{\printlistof{#2}}}
+			{}
+		}
+	}
+}
+
+%USED ENVIRONMENTS
+\NewEnvironment{Program}{برنامه}
+{50, 100, 100}
+
+\NewEnvironment[Inline, No List]{IProgram}{برنامه نمونه}
+{50, 50, 200}
+\NewEnvironment{Table}{جدول}
+{125, 0, 100}
+\NewEnvironment{Flowchart}{روند‌نما}
+{200, 100, 0}
+%\NewEnvironment{Example}{نمونه}{250, 0, 250}
+\NewEnvironment{Figure}{نمودار}
+{0, 0, 100}
+\NewEnvironment[Inline, No List]{Usage}{کاربرد}
+{250, 100, 100}
+
+%SAME NUMBER FOR FLOAT AND INLINE PROGRAMS
+\let\c@IProgram\c@Program
+\@namedef{ext@IProgram}{Program}
+
+%FIX ENVIRONMENTS
+\csappto{Usage}{\disable@lines}
+\def\setcaptionspace#1#2
+{
+	\csappto{#1} {#2}
+	\csappto{#1*}{#2}
+}
+
+%\setcaptionspace{Table}{\belowcaptionskip=1ex}
+%\setcaptionspace{Program}{\belowcaptionskip=-\tabcolsep}
+%\setcaptionspace{IProgram}{\belowcaptionskip=-\tabcolsep}
+
+\let\@original@Program\Program
+\let\@original@endProgram\endProgram
+
+\newenvironment{InlinePrograms}
+{
+	\let\Program\IProgram
+	\let\endProgram\endIProgram
+}
+{
+	\let\Program\@original@Program
+	\let\endProgram\@original@endProgram
+}

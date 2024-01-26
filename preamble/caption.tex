@@ -1,0 +1,22 @@
+%CAPTIONS
+\let\@original@baselinestretch\baselinestretch
+
+\long\def\@makecaption#1#2%
+{
+	\bgroup
+		\let\baselinestretch\@original@baselinestretch
+		\Yekan\color{environment}
+		\vskip\abovecaptionskip
+		\sbox\@tempboxa{#1\quad#2\@.}
+		\ifdim \wd\@tempboxa >\hsize
+			#1\quad#2\@.\par
+		\else
+			\global \@minipagefalse
+			\hb@xt@\hsize{\hfil\box\@tempboxa\hfil}
+		\fi
+		\vskip\belowcaptionskip
+	\egroup
+}
+
+\abovecaptionskip=0pt
+\belowcaptionskip=\abovecaptionskip

@@ -1,0 +1,53 @@
+name: Publish
+on: [push]
+jobs:
+  Publishing:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Setup Repository
+      uses: actions/checkout@v3
+
+    - name: Compile
+      uses: xu-cheng/latex-action@v3
+      with:
+        pre_compile: |
+          ln -sf /opt/texlive/texdir/texmf-dist/scripts/xindy/xindy.pl /opt/texlive/texdir/bin/x86_64-linuxmusl/xindy
+          ln -sf /opt/texlive/texdir/texmf-dist/scripts/xindy/texindy.pl /opt/texlive/texdir/bin/x86_64-linuxmusl/texindy
+          wget https://sourceforge.net/projects/xindy/files/xindy-source-components/2.4/xindy-kernel-3.0.tar.gz
+          tar xf xindy-kernel-3.0.tar.gz
+          cd xindy-kernel-3.0/src
+          apk add make
+          apk add clisp --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+          make
+          cp -f xindy.mem /opt/texlive/texdir/bin/x86_64-linuxmusl/
+          cd ../../
+        root_file: python.tex
+        extra_fonts: ./fonts/*.otf
+        latexmk_use_xelatex: true
+        latexmk_shell_escape: true
+
+    - name: Release Tag Name
+      run: echo "NOW=$(date +'v%Y.%m.%d')" >> $GITHUB_ENV
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.NOW }}
+        release_name: ${{ github.event.head_commit.message }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./python.pdf
+        asset_name: python.pdf
+        asset_content_type: application/pdf

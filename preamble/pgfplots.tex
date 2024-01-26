@@ -1,0 +1,13 @@
+\usepackage{pgfplots}
+%PGFPLOTS SETUP
+\pgfplotsset{compat=1.18}
+\pgfplotsset
+{
+	width=\hsize,
+	height=\hsize,
+	every axis/.append style={free size, environment, line width=\fboxrule},
+	every tick/.append style={/pgfplots/every axis},
+	every axis plot/.append style={line width=3\fboxrule},
+	every axis label/.style={environment, at={(ticklabel cs:0.5)}, anchor=near ticklabel},
+	every axis y label/.style={rotate=90},
+}

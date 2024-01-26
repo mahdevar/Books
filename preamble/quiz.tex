@@ -1,0 +1,28 @@
+\columnsep=2\tabcolsep
+\renewcommand\maketitle
+{
+	\begin{center}
+		\logo
+
+		\bfseries
+		دانشگاه کاشان\\
+		آزمون درس\space\@title
+	\end{center}
+}
+
+\newcounter{Quiz}
+\definecolor{Quiz}{RGB}{250, 50, 100}
+
+\newenvironment{Quiz}[1]
+{
+	\stepcounter{Quiz}
+	\begin{tcolorbox}[floats, nofloat, breakable, color=Quiz, title=\large\arabic{Quiz} -- #1]
+		\Yekan
+		\let\word\wordtext
+}
+{
+		\let\word\@original@word
+	\end{tcolorbox}
+}
+\geometry{margin=1cm}
+\pagestyle{empty}

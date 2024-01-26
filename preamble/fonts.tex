@@ -1,0 +1,30 @@
+\usepackage[Kashida, DetectColumn=on, perpagefootnote=on, tabledirection=lefttoright, extrafootnotefeatures]{xepersian}
+%fonts
+\settextfont			[WordSpace=1.2, Extension=.otf, Path=fonts/, Script=Persian, ItalicFont=sols, BoldFont=titr]{zar}
+\setlatintextfont		[WordSpace=1.2, Extension=.otf, Path=fonts/, Script=Latin, ItalicFont=sols, BoldFont=titr]{zar}
+\defpersianfont{\Kayhan}	[WordSpace=1.2, Extension=.otf, Path=fonts/, Script=Persian, ItalicFont=sols, BoldFont=titr]{kayhan}
+\defpersianfont{\Yekan}		[WordSpace=1.5, Extension=.otf, Path=fonts/, Script=Persian, ItalicFont=sols, BoldFont=titr]{yekan}
+\defpersianfont{\Mono}		[Extension=.otf, Path=fonts/, Script=Persian, ItalicFont=mono-italic, AutoFakeBold=3, BoldItalicFeatures={Font=mono-italic, FakeBold=3}]{mono}
+\setmonofont			[Extension=.otf, Path=fonts/, Script=Latin, ItalicFont=mono-italic, AutoFakeBold=3, BoldItalicFeatures={Font=mono-italic, FakeBold=3}]{mono}
+\setmathfont{XITS Math}
+
+%JOINING ZERO WIDTH WHITE SPACE
+\begingroup\lccode`~=`‌ \lowercase{\endgroup\protected\def~}{\nobreak\hskip 0.02em plus 0.01em minus 0.01em}
+\catcode`‌=\active%
+
+%END OF SENTENCES
+\protected\def\@.{.\@ifnextchar){}{\hskip 0.75em plus 0.05em minus 0.05em}}
+
+\catcode`\•=\active
+\def •{\@.}%
+
+%PERSIAN AND RIGHT TO LEFT TYPESETTING
+\long\def\Persian#1{\RLE{\PersianAlphs\setpersianfont#1}}
+\long\def\textFR#1{\RLE{#1}}
+\long\def\textLR#1{\LRE{#1}}
+\let\english\endR
+\let\farsi\beginR
+\twocolumnfootnotes
+
+%FORMATTING NOUNS
+\def\noun#1{{\Kayhan#1}}

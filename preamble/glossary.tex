@@ -1,0 +1,269 @@
+\usepackage[xindy={language=persian-variant2, codepage=utf}, toc, nomain, nopostdot, style=treegroup, nonumberlist, savewrites, esclocations]{glossaries}
+
+%USEFUL IF STATEMENT
+\def\ifexist#1{\def\temp{#1}\ifx\temp\empty\else}
+
+%MAKE FOUR GLOSSARIES
+\newglossary	{English}	{E_gls}		{E_glo}		{فرهنگ فارسی به انگلیسی}
+\newglossary	{Acronyms}	{EA_gls}	{EA_glo}	{فهرست واژگان کوتاه شده}
+
+%WE USE USERII FIELD TO STORE DESCRIPTIONS
+\glssetnoexpandfield{userii}
+
+\makeglossaries
+
+%GLOSSARY RELATED COMMANDS
+\AtVeryEndDocument{\glswritefiles\immediate\write18{makeglossaries \jobname}\let\glswritefiles\relax}
+
+\newglossarystyle{Book}
+{%
+	\setglossarystyle{treegroup}%
+	\renewcommand{\glossentry}[2]
+	{%
+		\par\glsentryitem{##1}%
+		\glstarget{##1}{\glossentryname{##1}}%
+		\glspostdescription\dotfill##2{\raggedright\glossentrydesc{##1}}%
+		\ifglshasfield{userii}{##1}{{\\\footnotesize\glsentryuserii{##1}}}{}
+ 	}%
+}
+
+\setglossarystyle{Book}
+
+\preto\chapter{\glsresetall[Acronyms]}
+
+\def\glossarypreamble%
+{%
+	\IfStrEq{\glossarytitle}{فهرست واژگان کوتاه شده}
+		{\latin}
+		{\persian}
+}%
+
+\def\glspluralsuffix{\nolinebreak{\if@RTL‌ها\else{s}\fi}}
+\newcommand\Property[2]{\expandafter\gdef\csname glo@\CTerm @#1\endcsname{#2}}
+
+\newcounter{M@TNO}
+\def\M@TermsList{}
+
+\newrobustcmd\Definition[7][]
+{
+	\stepcounter{M@TNO}
+	\expandafter\gdef\csname CTerm\endcsname{T\roman{M@TNO}}
+	\expandafter\edef \csname#1\endcsname{\CTerm}
+
+	\newglossaryentry{\CTerm}{name=#7, text=#7, description=\lr{#2}, type=\M@Dict}
+	\IfEq{\M@Dict}{Acronyms}
+		{\Property{desc}{\lr{#2}}}
+		{\Property{desc}{\rl{#2}}}
+	\listxadd{\M@TermsList}{#1}
+
+	\ifexist{#4}
+		\Property{plural}{#4}\Property{firstpl}{#4}
+	\fi
+
+	\ifexist{#5}
+		\Property{descplural}{\lr{#5}}
+	\fi
+
+	\ifexist{#3}
+		\Property{first}{#3}
+%%%%%%%%%%%%%%		\Property{short}{#3 AAAAAA}%%%%%%%%%
+		\Property{firstpl}{#3\glspluralsuffix}
+		\Property{useri}{hasfirst}
+	\fi
+	\ifexist{#6}
+		\Property{userii}{#6}
+%		\Description{#6}
+	\fi
+}
+
+\newcommand{\Synonym}[2][]
+{
+	\expandafter\edef \csname#1\endcsname{\CTerm}
+	\expandafter\gdef \csname @equal@#1\endcsname{#2}
+	\listxadd{\M@TermsList}{#1}
+}
+
+\newcommand{\روزمره}{\glslocalunset{\CTerm}}
+
+
+\newcommand{\Description}[1]
+{
+	\expandafter\gdef\csname\CTerm%
+	@note\endcsname{#1}
+}
+
+\newcommand{\FindTerm}[1]{\csname #1\endcsname}
+
+\hypersetup{unicode=true, citecolor=magenta,linkcolor=footnote}
+
+\defglsentryfmt{%
+	\ifglsused{\glslabel}
+	{\glsgenentryfmt}
+	{%
+		\em\ifHy@colorlinks%
+			\textcolor{\@linkcolor}{\mbox{\glsgenentryfmt}}%
+		\else%
+			\glsgenentryfmt%
+		\fi%
+	}%
+}
+
+\newbool{IsPlural}
+
+\newcommand{\ShowFootnotes}%
+{%
+	\IfStrEq{\glsentrytype{\CTerm}}{Persian}%
+		{\let\BIDIFootNote\RTLfootnote}%
+		{\let\BIDIFootNote\LTRfootnote}%
+	\IfStrEq{\glsentryuseri\CTerm}{hasfirst}%
+	{%
+		\ifbool{IsPlural}%
+			{\space(\glspl\CTerm\BIDIFootNote{\glslink{\CTerm}{\glsentrydescplural\CTerm\ (\glspl{\CTerm})}})}%
+			{\space(\gls\CTerm\BIDIFootNote{\glslink{\CTerm}{\glsentrydesc\CTerm\ (\gls{\CTerm})}})}%
+	}%
+	{%
+		\ifbool{IsPlural}%
+			{\BIDIFootNote{\glslink{\CTerm}{\glsentrydescplural\CTerm}}}%
+			{\BIDIFootNote{\glslink{\CTerm}{\glsentrydesc\CTerm}}}%
+	}%
+	\glslocalunset{\CTerm}%
+}%
+
+\def\LastPart{}
+\newrobustcmd\LastSpace[1]%
+{%
+	\IfSubStr{#1}{:}%
+	{%
+		\StrBehind{#1}{:}[\LastPart]%
+	}%
+	{%
+		\IfSubStr{#1}{ }%
+		{%
+			\StrBehind{#1}{ }[\LastPart]%
+			\LastSpace{\LastPart}%
+		}%
+		{}%
+	}%
+}%
+
+\newcommand\worddescription[1]
+{%
+	\def\CTerm{\FindTerm{#1}}%
+	\glshyperlink[\glsdesc*\CTerm]{\CTerm}%
+}
+\newrobustcmd\wordnote[1]
+{%
+	\def\CTerm{\FindTerm{#1}}%
+	\glsentryuserii{\CTerm}%
+%	\csname\CTerm%
+%@note\endcsname%
+}
+
+%\appto\document{
+%\ifHy@colorlinks%
+%\else
+%	\renewcommand{\Hy@colorlink}[1]{\begingroup}%
+%\fi}
+
+\newbool{M@AttachSuffix}
+\newrobustcmd\word[1]%
+{%
+	\let\M@Orginal@Hy@colorlink\Hy@colorlink%
+	\renewcommand{\Hy@colorlink}[1]{\begingroup}%
+	\boolfalse{M@AttachSuffix}%
+	\boolfalse{IsPlural}%
+	\ifinlist{#1}{\M@TermsList}%
+	{%
+		\def\CTerm{\FindTerm{#1}}%
+		\ifglsused{\CTerm}%
+			{\let\@post@action\relax}%
+			{\let\@post@action\ShowFootnotes}%
+		\ifcsundef{@equal@#1}%
+			{\gls\CTerm}%
+			{\glsdisp{\CTerm}{\csname @equal@#1\endcsname}}%
+	}%
+	{%
+		\LastSpace{#1}%
+		\StrLen{\LastPart}[\LastPartLen]%
+		\StrGobbleRight{#1}{\LastPartLen-1}[\TermSource]%
+		\def\CTerm{\FindTerm{\TermSource}}%
+		\ifglsused{\CTerm}%
+			{\let\@post@action\relax}%
+			{\let\@post@action\ShowFootnotes}%
+		\IfBeginWith{\LastPart}{ـ}%
+			{\StrGobbleLeft{\LastPart}{1}[\LastPart]\booltrue{M@AttachSuffix}}%
+			{\boolfalse{M@AttachSuffix}}%
+		\IfSubStr{\LastPart}{ها}%
+		{%
+			\booltrue{IsPlural}%
+			\StrDel[1]{\LastPart}{ها}[\LastPartText]%
+			\IfBeginWith{\LastPartText}{ـ}%
+				{\StrGobbleLeft{\LastPartText}{1}[\LastPartText]\booltrue{M@AttachSuffix}}%
+				{\boolfalse{M@AttachSuffix}}%
+			\glspl\CTerm[\ifbool{M@AttachSuffix}{}{\nobreak}\LastPartText]%
+		}%
+		{%
+			\ifcsundef{@equal@\TermSource}%
+				{\gls\CTerm[\ifbool{M@AttachSuffix}{}{‌\nobreak}\LastPart]}%
+				{\glsdisp{\CTerm}{\csname @equal@\TermSource\endcsname\ifbool{M@AttachSuffix}{}{‌\nobreak}\LastPart}}%
+		}%
+	}%
+	\let\Hy@colorlink\M@Orginal@Hy@colorlink%
+	\@post@action%
+}%
+
+\begingroup\lccode`~=`‹ \lowercase{\endgroup\protected\def~}{\expandafter\useword}
+\catcode`‹=\active
+\protected\def\useword#1›{\word{#1}}%
+
+\let\@original@word\word
+\newrobustcmd\wordtext[1]%
+{%
+	\let\M@Orginal@Hy@colorlink\Hy@colorlink%
+	\renewcommand{\Hy@colorlink}[1]{\begingroup}%
+	\boolfalse{M@AttachSuffix}%
+	\boolfalse{IsPlural}%
+	\ifinlist{#1}{\M@TermsList}%
+	{%
+		\def\CTerm{\FindTerm{#1}}%
+		\glshyperlink[\ifcsundef{@equal@#1}%
+			{\glsentrytext\CTerm}%
+			{\csname @equal@#1\endcsname}%
+		]{\CTerm}%
+	}%
+	{%
+		\LastSpace{#1}%
+		\StrLen{\LastPart}[\LastPartLen]%
+		\StrGobbleRight{#1}{\LastPartLen-1}[\TermSource]%
+		\def\CTerm{\FindTerm{\TermSource}}%
+		\IfBeginWith{\LastPart}{ـ}{%
+		\StrGobbleLeft{\LastPart}{1}[\LastPart]%
+		\booltrue{M@AttachSuffix}}{\boolfalse{M@AttachSuffix}}%
+		\IfSubStr{\LastPart}{ها}%
+		{%
+			\booltrue{IsPlural}%
+			\StrDel[1]{\LastPart}{ها}[\LastPartText]%
+			\IfBeginWith{\LastPartText}{ـ}%
+				{\StrGobbleLeft{\LastPartText}{1}[\LastPartText]\booltrue{M@AttachSuffix}}%
+				{\boolfalse{M@AttachSuffix}}%
+			\glshyperlink[\glsentryplural\CTerm\ifbool{M@AttachSuffix}{}{\nobreak}\LastPartText]{\CTerm}%
+		}%
+		{%
+		\glshyperlink[\ifcsundef{@equal@\TermSource}%
+			{\glsentrytext\CTerm}%
+			{\csname @equal@\TermSource\endcsname}%
+			\ifbool{M@AttachSuffix}{}{‌\nobreak}\LastPart%
+		]{\CTerm}%
+		}%
+	}%
+	\let\Hy@colorlink\M@Orginal@Hy@colorlink%
+}%
+
+\begingroup\lccode`~=`❬ \lowercase{\endgroup\protected\def~}{\expandafter\usewordtext}
+\catcode`❬=\active
+\protected\def\usewordtext#1❭{\wordtext{#1}}%
+
+\def\Dictionary#1
+{
+	\def\M@Dict{#1}
+}

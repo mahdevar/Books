@@ -1,0 +1,273 @@
+%PROGRAMMING PREAMBLE
+\usepackage[procnames]{listings}
+%VISIBLE SPACE
+\catcode`\␣=\active
+\def ␣{\allowbreak\texttt{\char"2423}\nobreak}%
+
+\let\lst@visiblespace\textvisiblespace
+
+\lst@InstallKeywords{a}{argument}{argumentstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{c}{constant}{constantstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{f}{function}{functionstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{k}{command} {commandstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{p}{local}   {localstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{r}{private} {privatestyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{o}{operator}{operatorstyle}\relax{keywordstyle}{}ld
+\lst@InstallKeywords{i}{import}  {importstyle}\relax{keywordstyle}{}ld
+
+\definecolor{comment}   {RGB}	{255,   0,   0}
+\definecolor{constant}  {RGB}	{  0,  96,   0}
+\definecolor{function}  {RGB}	{  0, 128,   0}
+\definecolor{identifier}{RGB}	{192,   0,  96}
+\definecolor{keyword}   {RGB}	{  0,   0, 192}
+\definecolor{operator}  {RGB}	{  0, 128, 255}
+\definecolor{private}   {RGB}	{128, 128, 128}
+\definecolor{import}    {RGB}	{ 96,   0,   0}
+
+\lstdefinelanguage{baselanguage}
+{
+	aboveskip=0pt,
+	belowskip=0pt,
+	breaklines=true,
+	breakatwhitespace=true,
+	breakindent=1.5em,
+	everydisplay=\ifvmode\vspace\parskip\fi,
+	showstringspaces=true,
+	tabsize=4,
+	upquote=true,
+	prebreak=\raisebox{-0.2\baselineskip}[0ex][0ex]{\rotatebox[origin=c]{180}{\ensuremath{\color{environment}\Rsh}}},
+	postbreak=\raisebox{0.2\baselineskip}[0ex][0ex]{\rotatebox[origin=c]{180}{\ensuremath{\color{environment}\Lsh}}},
+	%Unifying styles
+	identifierstyle=\lst@keywordstyle\bfseries,
+	numberstyle=\lst@basicstyle\color{environment},
+	stringstyle=\lst@commentstyle,
+	%To add Persian strings
+	escapebegin=\lst@stringstyle\expandafter\rl\bgroup\Mono,
+	escapeend=\egroup,
+	escapeinside={«}{»},
+	%Common to all languages
+	alsoletter=_,
+	morestring=[b]",
+	morestring=[b]',
+	%Styles
+	basicstyle=\ttfamily\setLTR,
+	argumentstyle=\lst@operatorstyle\underbar,
+	commandstyle=\color{keyword}\bfseries,
+	commentstyle=\color{comment},
+	constantstyle=\color{constant}\bfseries,
+	functionstyle=\color{function}\itshape,
+	localstyle=\lst@keywordstyle,
+	keywordstyle=\color{identifier},
+	operatorstyle=\color{operator},
+	importstyle=\color{import}\bfseries,
+	privatestyle=\color{private}\slshape,
+	literate=*
+		{*}{{{\lst@operatorstyle*}}}{1}
+		{/}{{{\lst@operatorstyle/}}}{1}
+		{\%}{{{\lst@operatorstyle\%}}}{1}
+		{\&}{{{\lst@operatorstyle\&}}}{1}
+		{^}{{{\lst@operatorstyle^}}}{1}
+		{|}{{{\lst@operatorstyle|}}}{1}
+		{-}{{{\lst@operatorstyle-}}}{1}
+		{+}{{{\lst@operatorstyle+}}}{1}
+		{<}{{{\lst@operatorstyle<}}}{1}
+		{=}{{{\lst@operatorstyle=}}}{1}
+		{:}{{{\lst@operatorstyle:}}}{1}
+		{>}{{{\lst@operatorstyle>}}}{1}
+		{!=}{{{\lst@operatorstyle!=}}}{2}
+		{**}{{{\lst@operatorstyle**}}}{2}
+		{*=}{{{\lst@operatorstyle*=}}}{2}
+		{/=}{{{\lst@operatorstyle/=}}}{2}
+		{+=}{{{\lst@operatorstyle+=}}}{2}
+		{<=}{{{\lst@operatorstyle<=}}}{2}
+		{-=}{{{\lst@operatorstyle-=}}}{2}
+		{==}{{{\lst@operatorstyle==}}}{2}
+		{>=}{{{\lst@operatorstyle>=}}}{2}
+}
+
+\lstdefinelanguage{python}[]{baselanguage}
+{
+	morecommand={as, break, class, continue, def, del, elif, else, except, finally, for, from, global, if, import, in, match, pass, return, try, while},
+	morefunction={abs, acos, append, asin, atan, atan2, ceil, chr, clear, complex, cos, count, degrees, dict, endswith, eval, exp, extend, find, float, floor, frozenset, get, hex, hypot, index, input, insert, int, isnumeric, items, join, keys, len, list, log, log10, map, max, mean, min, oct, ord, pop, pow, print, prod, radians, range, remove, replace, repr, reverse, round, set, setdefault, shuffle, sin, sort, split, sqrt, startswith, str, sum, tan, tuple, unichar, uniform, update, values},
+	moreconstant={False, None, True},
+	moreprivate={_, __add__, __init__, __iter__, __mul__, __next__, __pow__, __str__, __sub__, __truediv__, __lt__, __gt__, __el__, __eg__, __eq__, __ne__, __pos__, __neg__, __int__, __float__},
+	moreprivate={ArithmeticError, AttributeError, ImportError, IndexError, KeyError, OverflowError, TypeError, ValueError, ZeroDivisionError},
+	moreimport={decimal, functools, math, matplotlib, mpmath, numpy, pandas, random, statistics, sys},
+	moreoperator={and, not, or},
+	moreargument={end, other, self},
+	morecomment=[l]\#,
+	morestring=[s]{"""}{"""},
+}
+
+\lstdefinelanguage{cpp}[]{baselanguage}
+{
+	morecommand={break, class, continue, delete, else, float, for, if, int, namespace, return, switch, using, while},
+	morefunction={main, sin},
+	moreconstant={false, true, this, NULL},
+	morecomment=[l]\#,
+	moreoperator={},
+	moreargument={},
+	morecomment=[l]//,
+	morecomment=[s]{/*}{*/},
+}
+
+
+\def\Parts
+{
+	argument,
+	command,
+	constant,
+	function,
+	identifier,
+	import,
+	local,
+	operator,
+	private,
+}
+
+\let\Set\empty
+\let\Latest\empty
+
+\newrobustcmd\Delete[1]{%
+	\lstset{deleteargument={#1}, deletecommand={#1}, deleteconstant={#1}, deletefunction={#1}, deleteimport={#1}, deletekeywords={#1}, deleteoperator={#1}, deleteprivate={#1}, deletelocal={#1}}%
+}
+
+\newrobustcmd\Append[2]
+{%
+	\appto\Set   {\Delete{#2}\lstset{more#1={#2}}}%
+	\appto\Latest{\Delete{#2}\lstset{more#1={#2}}}%
+}
+
+\foreach \Z in \Parts
+{
+	\expandafter\protected@xdef\csname\Z\endcsname##1{\Append{\Z}{##1}}
+}
+
+\def\removepar{\ltx@ifnextchar{\par}{}{\vskip-\parskip}}
+
+\newcounter{lastline}
+
+\catcode`\▼=\active
+\def ▼%
+{
+	\begingroup
+		\Set
+		\begin{lstlisting}[firstnumber=1]
+}
+
+\catcode`\▲=\active
+\def ▲%
+{
+		\end{lstlisting}
+		\setcounter{lastline}{\thelstnumber}
+	\endgroup
+	\let\Latest\Set
+	\let\Set\empty
+	\removepar
+}
+
+
+\catcode`\▽=\active
+\def ▽%
+{
+	\begingroup
+		\Latest
+		\begin{lstlisting}[firstnumber=\thelastline]
+}
+
+\catcode`\△=\active
+\def △%
+{
+		\end{lstlisting}
+		\setcounter{lastline}{\thelstnumber}
+	\endgroup
+	\let\Set\empty
+	\removepar
+}
+
+\newrobustcmd\code[1]
+{%
+	\begingroup%
+		\Latest
+		\textLR%
+		{%
+			\lstinline[columns=fixed]{#1}%
+		}%
+	\endgroup
+	\let\Set\empty
+}%
+
+\appto\document
+{
+	\def\mathtt#1{\text{\code{#1}}}
+}
+
+\def\@opacity{0.08}
+\FPeval\@intensity{200*\@opacity}% twice intensity as we are in a colored box, probably.
+
+\lstdefinestyle{response}
+{
+	numbers=none,
+	backgroundcolor=\color{environment!\@intensity},
+	frame=trbl,
+	framerule=0pt,
+	framesep=\tabcolsep,
+	linewidth=\hsize,
+	boxpos=c,
+	xleftmargin=\tabcolsep,
+	xrightmargin=\tabcolsep,
+	aboveskip=\tabcolsep,
+	belowskip=\tabcolsep-4pt,
+	argumentstyle=\lst@basicstyle,
+	commandstyle=\lst@basicstyle,
+	commentstyle=\lst@basicstyle,
+	constantstyle=\lst@basicstyle,
+	functionstyle=\lst@basicstyle,
+	identifierstyle=\lst@basicstyle,
+	importstyle=\lst@basicstyle,
+	keywordstyle=\lst@basicstyle,
+	operatorstyle=\lst@basicstyle,
+	privatestyle=\lst@basicstyle,
+	moredelim=[is][\em]{~}{~}
+}
+
+\let\LineAlignment\empty
+\lst@AddToHook{EveryLine}{\LineAlignment}
+
+\catcode`\⧩=\active
+\def ⧩{\let\LineAlignment\hfill\begin{lstlisting}[style=response]}
+
+\catcode`\◮=\active
+\def ◮{\end{lstlisting}\let\LineAlignment\empty\removepar}
+
+\catcode`\⧨=\active
+\def ⧨{\begin{lstlisting}[style=response]}
+
+\catcode`\◭=\active
+\def ◭{\end{lstlisting}\removepar}
+
+\begingroup
+	\catcode 34=13
+	\catcode 39=13
+	\catcode 96=13
+	\gdef"{A\textquotedbl}
+	\gdef'{A\textquotesingle}
+	\gdef`{A\textasciigrave}
+\endgroup
+
+\newrobustcmd\likestring[1]
+{{%
+	\lst@stringstyle\Mono%
+	\StrSubstitute{"#1"}{ }{\textvisiblespace}[\temp]%
+	\StrSubstitute{\temp}{"}{\textquotedbl}[\temp]%
+	\StrSubstitute{\temp}{'}{\textquotesingle}%
+}}
+
+%FIX LISTINGS LINE NUMBER
+\def\line@numbering@format{\makebox[1.5em][l]{\lst@numberstyle{\thelstnumber}}}
+
+%ENABLE AND DISABLE LINE NUMBERS
+\def\disable@lines{\let\lst@PlaceNumber\relax}
+\def\enable@lines{\let\lst@PlaceNumber\line@numbering@format}
+
+\lstset{language=python}
