@@ -1,4 +1,3 @@
-\usepackage[xetex, unicode=true, pdfusetitle, bookmarks=false, breaklinks=true, pdfborder={0 0 1}, backref=false, colorlinks=true]{hyperref}
 \usepackage{hypcap}
 \usepackage{cleveref}
 \usepackage{pdfpages}
@@ -12,6 +11,16 @@
 
 }
 
+\AtBeginDocument
+{
+	\Name{chapter}{بخش}{environment}
+	\Name{contents}{فهرست بخش‌ها}{environment}
+	\Name{section}{زیر بخش}{environment}
+	\Name{subsection}{زیر بخش}{environment}
+	\Name{subsubsection}{زیر بخش}{environment}
+	\Name{line}{دستور}{environment}
+	\lst@AddToHook{Init}{\def\cref@currentlabel{[line][\arabic{lstnumber}][\cref@currentprefix]\english\ttfamily\thelstnumber}}%
+}
 \AtBeginDocument
 {
 	%BEAUTIFY CITATIONS
