@@ -1,28 +1,44 @@
-\columnsep=2\tabcolsep
+\makeatletter
+
+\newcommand\format[1]
+{%
+	\FPeval\h{trunc(#1/60:0)}%
+	\FPeval\m{trunc(#1-60*\h:0)}%
+	\h:\FPiflt{\m}{10}0\fi\m%
+}
+
+\newcommand\duration[1]{\gdef\@duration{#1}}
+
 \renewcommand\maketitle
 {
 	\begin{center}
 		\logo
-
-		\bfseries
+		{\bfseries
 		دانشگاه کاشان\\
-		آزمون درس\space\@title
+		آزمون \@title\\}
+		(\arabic{TotalQuiz} پرسش با~\format{\@duration}~زمان)
 	\end{center}
 }
 
 \newcounter{Quiz}
-\definecolor{Quiz}{RGB}{250, 50, 100}
-
+\newcounter{TotalQuiz}
+\definecolor{Quiz}{RGB}{200, 0, 50}
+\def\Last{0}
 \newenvironment{Quiz}[1]
 {
 	\stepcounter{Quiz}
-	\begin{tcolorbox}[floats, nofloat, breakable, color=Quiz, title=\large\arabic{Quiz} -- #1]
+	\let\word\wordtext
+	\write\@mainaux{\gdef\string\Last{\theQuiz}}
+	\write\@mainaux{\string\stepcounter{TotalQuiz}}
+	\colorlet{environment}{Quiz}
+	\begin{tcolorbox}[floats, nofloat, breakable, force nobeforeafter, color=environment, title=\large\arabic{Quiz} از \arabic{TotalQuiz}~\@SepMark~#1]
 		\Yekan
-		\let\word\wordtext
 }
 {
-		\let\word\@original@word
 	\end{tcolorbox}
+	\let\word\@original@word
 }
 \geometry{margin=1cm}
 \pagestyle{empty}
+
+\makeatother
