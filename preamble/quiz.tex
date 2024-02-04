@@ -11,27 +11,29 @@
 
 \renewcommand\maketitle
 {
-	\begin{center}
-		\logo
-		{\bfseries
+	{\centering\color{question}
+		\logo\vskip-\parskip
+		\bfseries
 		دانشگاه کاشان\\
-		آزمون \@title\\}
-		(\arabic{TotalQuiz} پرسش با~\format{\@duration}~زمان)
-	\end{center}
+		آزمون \@title\\
+		{\footnotesize(\arabic{questions} پرسش با~\format{\@duration}~زمان)}\\
+	}
+	\par
 }
 
-\newcounter{Quiz}
-\newcounter{TotalQuiz}
-\definecolor{Quiz}{RGB}{200, 0, 50}
-\def\Last{0}
-\newenvironment{Quiz}[1]
+\definecolor{question}{RGB}{0, 50, 100}
+\colorlet{logo}{question}
+
+\newcounter{question}
+\newcounter{questions}
+
+\newenvironment{question}[1]
 {
-	\stepcounter{Quiz}
+	\stepcounter{question}
 	\let\word\wordtext
-	\write\@mainaux{\gdef\string\Last{\theQuiz}}
-	\write\@mainaux{\string\stepcounter{TotalQuiz}}
-	\colorlet{environment}{Quiz}
-	\begin{tcolorbox}[floats, nofloat, breakable, force nobeforeafter, color=environment, title=\large\arabic{Quiz} از \arabic{TotalQuiz}~\@SepMark~#1]
+	\write\@mainaux{\string\stepcounter{questions}}
+	\colorlet{environment}{question}
+	\begin{tcolorbox}[floats, nofloat, breakable, opacityframe=1.0, beforeafter skip=\parskip, color=environment, title=\large\arabic{question} از \arabic{questions}~\@SepMark~#1]
 		\Yekan
 }
 {
