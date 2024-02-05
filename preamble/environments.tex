@@ -1,9 +1,13 @@
 %TWOCOLUMNS SIZE FIX
-%\appto\prepare@multicols
-%{
-%	\advance\hsize-\tabcolsep
-%	\advance\hsize-\fboxrule
-%}
+\@ifpackageloaded{multicol}
+{
+	\appto\prepare@multicols
+	{
+		\advance\hsize-\tabcolsep
+		\advance\hsize-\fboxrule
+	}
+}
+{}
 
 %GENERATE LESS PAGE OF FLOATS
 \renewcommand{\textfraction}{0.10}
