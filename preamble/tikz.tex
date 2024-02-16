@@ -1,63 +1,60 @@
 %TIKZ RELATED COMMANDS
+\usepackage{varwidth}
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{calc, datavisualization, fit, patterns, positioning, scopes, shapes}
-\tikzoption{text aligned}[]{\def\tikz@text@action{\parfillskip 0pt\relax}}%
-\tikzoption{text justified}[]{\def\tikz@text@action{\setlength{\leftskip}{0pt plus -0.5fil}\setlength{\rightskip}{0pt plus 0.5fil}}}%
 
-\newlength\@latest@tikz@node@distance
-
-\fboxrule=1pt
+\fboxrule=0.5pt
 
 \FPeval\intensity{100*\@opacity}
 
 \tikzset
 {
+	right to left/.style=
+	{
+		execute at begin node={\centering\begin{varwidth}{\textwidth}\beginR\@RTLtrue\footnotesize},
+		execute at end node={\beginL\end{varwidth}}
+	}
+}
+
+\tikzset
+{
 	color/.style={draw=#1, fill=#1!\intensity},
-	every label/.append style={free size, opacity=1, label distance=-1em},
-	every matrix/.append style={matrix of nodes, row sep=3em, column sep=3em, nodes={anchor=center}},
-	every node/.append style={execute at begin node=\beginR\@RTLtrue\Kayhan\footnotesize, execute at end node=\endR\vspace*{1pt}, rounded corners=1mm, line cap=round, align=flush center, inner sep=0.25\tabcolsep, line width=\fboxrule},
-	every picture/.append style={width=5em, minimum height=5em, node distance=2.5em},
-	far/.style={node distance=\@latest@tikz@node@distance + 1em},
-	free size/.append code={\let\tikz@text@width=\@empty},
-	free size/.append style={minimum width=0, minimum height=0},
-	highlights/.style={on background layer, every node/.append style={rectangle, free size, fill opacity=\@opacity, draw opacity=0.5, inner sep=-0.5\fboxrule+0.25\tabcolsep+0.25\fboxrule, pattern=checkerboard, pattern color=environment, draw=environment}}, %set "inner sep" to -0.5\fboxrule to remove spaces
-	node distance/.append code={\setlength{\@latest@tikz@node@distance}{#1}},
+	edges/.style={align=center, minimum height=0, ->, shorten >= 0.5\tabcolsep, shorten <= 0.5\tabcolsep, line cap=round, line width=\fboxrule, rounded corners=1mm, every node/.append style={auto, font=\em, inner ysep=0.5\tabcolsep, width=3em-\tabcolsep}},
+	highlights/.style={on background layer, every node/.append style={rectangle, fill opacity=\@opacity, draw opacity=0.5, inner sep=0.25\tabcolsep-0.25\pgflinewidth, pattern=checkerboard, pattern color=environment, draw=environment}}, %set "inner sep" to -0.5\pgflinewidth to remove spaces
 	size/.style={width={#1}, minimum height={#1}},
-	wide/.style={width=7em},
+	wide/.style={width=7.5em},
 	width/.style={minimum width=#1,	text width=#1-2*(\pgfkeysvalueof{/pgf/inner xsep})-\pgflinewidth},
-	annotate/.style 2 args={free size, right=0 of #1.#2, anchor=#2},
+}
+
+\tikzset
+{
+	every matrix/.style={matrix of nodes, row sep=3em, column sep=3em, nodes={anchor=center, inner sep=0.5\tabcolsep, size=5em}},
+	every node/.style={align=none, font=\Kayhan, inner sep=0pt, line cap=round, line width=\fboxrule, right to left, rounded corners=1mm},
 }
 
 \newcommand\Style[2]
 {
 	\tikzset{#1/.append style={#2}}
-	\tikzset{#1s/.append style={every node/.append style={#2}}}
 }
 
 %FLOWCHART
 \Style{computation}{rectangle, color=blue}
 \Style{decision}{diamond, color=violet, size=5.2em, outer sep=-0.23mm, inner sep=-1ex}
-\Style{edge}{every node/.append style={font=\setRTL\farsi\footnotesize\Kayhan\em}, font=\farsi\em, minimum height=0, ->, shorten >= 0.5\tabcolsep, shorten <= 0.5\tabcolsep, line cap=round, rounded corners=0.5mm, line width=\fboxrule, every node/.append style={free size, inner sep=0.5\tabcolsep, auto}}
-\Style{input}{trapezium, color=red, width=4.8em, trapezium left angle=60, trapezium right angle=120, trapezium stretches body}
-\Style{junction}{circle, color=black, free size, size=2.5em}
+\Style{input}{trapezium, color=red, width=3.72em, trapezium left angle=60, trapezium right angle=120, trapezium stretches body}
+\Style{junction}{circle, color=black, size=3em}
 \Style{output}{tape, color=teal, minimum height=12ex, tape bend top=none, tape bend height=2ex}
-\Style{terminator}{rectangle, color=black, rounded corners=4ex}
-\Style{transparent}{rectangle, font=\em}
+\Style{terminator}{rectangle, color=black, rounded corners=1.67em}
 \Style{two-sided}{commutative diagrams/shift left=1em}
 
 %OBJECTS
-\Style{activity}{rectangle, color=orange, text aligned}
+\Style{activity}{rectangle, color=orange}
 \Style{object}{circle, color=blue}
 \Style{role}{circle, color=red}
 
-%CORRECTIONS
-\tikzset{activities/.style={activitys}}
-\tikzset{edges/.style={edge}}
-
 %TIKZ FOOTNOTES
-\def\TikzNewNoteMark#1.#2;{\node [free size, anchor=#2] at (#1.#2) {\NewNoteMark};}
-\def\TikzLastNoteMark#1.#2;{\node [free size, anchor=#2] at (#1.#2) {\EndNoteMark{0}};}
+\def\TikzNewNoteMark#1.#2;{\node [anchor=#2, size=1em] at (#1.#2) {\NewNoteMark};}
+\def\TikzLastNoteMark#1.#2;{\node [anchor=#2, size=1em] at (#1.#2) {\EndNoteMark{0}};}
 
 %PUT PICTURES IN CENTER
 \preto\tikzpicture{\par\centering}
