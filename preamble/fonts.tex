@@ -19,11 +19,12 @@
 \def •{\@.}%
 
 %PERSIAN AND RIGHT TO LEFT TYPESETTING
-\long\def\Persian#1{\RLE{\PersianAlphs\setpersianfont#1}}
-\long\def\textFR#1{\RLE{#1}}
-\long\def\textLR#1{\LRE{#1}}
+\let\textFR\RLE
+\let\textLR\LRE
+
 \let\english\beginL
 \let\farsi\beginR
+
 \twocolumnfootnotes
 
 %FORMATTING NOUNS
