@@ -3,11 +3,12 @@
 \pgfplotsset{compat=1.18}
 \pgfplotsset
 {
-	width=\hsize,
-	height=\hsize,
-	every axis/.append style={free size, environment, line width=\fboxrule},
-	every tick/.append style={/pgfplots/every axis},
+	every axis label/.style={at={(ticklabel cs:0.5)}, anchor=near ticklabel, /pgfplots/every tick label},
 	every axis plot/.append style={line width=3\fboxrule},
-	every axis label/.style={environment, at={(ticklabel cs:0.5)}, anchor=near ticklabel},
 	every axis y label/.style={rotate=90},
+	every axis/.append style={environment, line width=\fboxrule},
+	every tick label/.style={environment, inner sep=0.5\tabcolsep},
+	every tick/.append style={/pgfplots/every axis},
+	height=\hsize,
+	width=\hsize,
 }
