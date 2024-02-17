@@ -1,7 +1,7 @@
 %TIKZ RELATED COMMANDS
-\usepackage{varwidth}
 \usepackage{tikz}
 \usepackage{tikz-cd}
+\usepackage{varwidth}
 \usetikzlibrary{calc, datavisualization, fit, patterns, positioning, scopes, shapes}
 
 \fboxrule=0.5pt
@@ -12,8 +12,8 @@
 {
 	right to left/.style=
 	{
-		execute at begin node={\centering\begin{varwidth}{\textwidth}\beginR\@RTLtrue\footnotesize},
-		execute at end node={\beginL\end{varwidth}}
+		execute at begin node={\centering\begin{varwidth}{\textwidth}\@RTLtrue\footnotesize},
+		execute at end node={\@RTLfalse\end{varwidth}}
 	}
 }
 
@@ -57,5 +57,5 @@
 \def\TikzLastNoteMark#1.#2;{\node [anchor=#2, size=1em] at (#1.#2) {\EndNoteMark{0}};}
 
 %PUT PICTURES IN CENTER
-\preto\tikzpicture{\par\centering}
-\appto\endtikzpicture{\par}
+\BeforeBeginEnvironment{tikzpicture}{\begin{center}}
+\AfterEndEnvironment{tikzpicture}{\end{center}}
