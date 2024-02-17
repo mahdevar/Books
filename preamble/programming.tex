@@ -207,17 +207,10 @@
 
 \lstdefinestyle{response}
 {
-	numbers=none,
+	aboveskip=0pt,
 	backgroundcolor=\color{environment!\@intensity},
-	frame=trbl,
-	framerule=0pt,
-	framesep=\tabcolsep,
-	linewidth=\hsize,
-	boxpos=c,
-	xleftmargin=\tabcolsep,
-	xrightmargin=\tabcolsep,
-	aboveskip=\tabcolsep,
-	belowskip=\tabcolsep-4pt,
+	belowskip=0pt,
+	numbers=none,
 	argumentstyle=\lst@basicstyle,
 	commandstyle=\lst@basicstyle,
 	commentstyle=\lst@basicstyle,
@@ -231,20 +224,32 @@
 	moredelim=[is][\em]{~}{~}
 }
 
-\let\LineAlignment\empty
-\lst@AddToHook{EveryLine}{\LineAlignment}
+\let\lst@alignment\empty
+\lst@AddToHook{EveryLine}{\lst@alignment}
 
-\catcode`\⧩=\active
-\def ⧩{\let\LineAlignment\hfill\begin{lstlisting}[style=response]}
+\lst@Key{align}{}
+{
+	\lstKV@SwitchCases{#1}
+	{%
+		left:\let\lst@alignment\empty\\%
+		right:\let\lst@alignment\hfill%
+	}{\def\lst@alignment{#1}}
+}
 
-\catcode`\◮=\active
-\def ◮{\end{lstlisting}\let\LineAlignment\empty\removepar}
+\lstnewenvironment{response}[1][]
+{
+	\lstset{style=response, #1}
+	\begin{block}
+}
+{
+	\end{block}
+}
 
-\catcode`\⧨=\active
-\def ⧨{\begin{lstlisting}[style=response]}
+\catcode`\⧨=\active	\def ⧨{\begin{response}}
+\catcode`\◭=\active	\def ◭{\end{response}}
 
-\catcode`\◭=\active
-\def ◭{\end{lstlisting}\removepar}
+\catcode`\⧩=\active	\def ⧩{\begin{response}[align=right]}
+\catcode`\◮=\active	\def ◮{\end{response}}
 
 \begingroup
 	\catcode 34=13
