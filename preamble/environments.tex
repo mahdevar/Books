@@ -47,6 +47,28 @@
 	\endlist%
 }
 
+
+\newenvironment{block}
+{%
+%	\begingroup%
+	\hrule height 0pt%
+}
+{%
+	\hrule height 0pt%
+%	\endgroup%
+}
+
+
+%REMOVE EXTRA VERTICAL SPACES
+\renewenvironment{center}
+{%
+	\begin{block}%
+	\centering%
+}
+{%
+	\end{block}%
+}
+
 \FPeval\@floatopacity{0.5*\@opacity}
 
 \tcbset
