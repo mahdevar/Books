@@ -182,7 +182,7 @@
 	\global\advance\@en@count 1%
 	\EndNoteMark%
 }
-\newcommand\EndNoteText[1]{\listadd{\@en@text}{#1}}
+\newcommand\EndNoteText[1]{\listgadd{\@en@text}{#1}}
 \newcommand\EndNote[1]{\NewNoteMark\EndNoteText{#1}}
 
 \newcommand{\WriteFootnotes}
