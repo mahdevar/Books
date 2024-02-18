@@ -50,10 +50,10 @@
 	\expandafter\gdef\csname CTerm\endcsname{T\roman{M@TNO}}
 	\expandafter\edef \csname#1\endcsname{\CTerm}
 
-	\newglossaryentry{\CTerm}{name=#7, text=#7, description=\lr{#2}, type=\M@Dict}
-	\IfEq{\M@Dict}{Acronyms}
-		{\Property{desc}{\lr{#2}}}
-		{\Property{desc}{\rl{#2}}}
+	\newglossaryentry{\CTerm}{name=#7, text=#7, description=#2, type=\M@Dict}
+	\IfEq{\M@Dict}{Persian}
+		{\Property{desc}{\farsi#2}}
+		{\Property{desc}{\english#2}}
 	\listxadd{\M@TermsList}{#1}
 
 	\ifexist{#4}
