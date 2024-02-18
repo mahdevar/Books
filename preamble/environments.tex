@@ -199,13 +199,6 @@
 		\renewcommand*{\do}[1]
 		{%
 			\advance\count255 1%
-			\hypertarget{\enid}{\makebox[1em][r]{\abjadcounter}}%
-			##1%
-			\par%
-		}
-		\renewcommand*{\do}[1]
-		{%
-			\advance\count255 1%
 			\makebox[1em][r]{\abjadcounter}%
 			\raisebox{\ht\strutbox}{\hypertarget{\enid}}%
 			##1%
