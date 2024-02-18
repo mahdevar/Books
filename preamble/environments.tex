@@ -47,14 +47,16 @@
 	\endlist%
 }
 
-
+%AN ENVIRONMENT SEPARATED WITH PAR(SKIP) FROM SURROUNDINGS
 \newenvironment{block}
 {%
 %	\begingroup%
-	\hrule height 0pt%
+%	\par
+	\hrule height 1pt%
 }
 {%
-	\hrule height 0pt%
+	\hrule height 1pt%
+%	\par
 %	\endgroup%
 }
 
@@ -156,38 +158,64 @@
 {
 	%RESIZE FOOTNOTE RULE
 	\def\footnoterule
-	{%
-		{\color{footnote}\hrule \@width \hsize}%
+	{
+		{\color{footnote}\hrule \@width \hsize}
 	}
 }
 
 %ENVIRONMENTS FOOTNOTES
-\newcounter{EndNoteCounter}
-\newcounter{EndNoteSeries}
+\newcount\@en@series
+\newcount\@en@count
 
-\newcommand\EndNoteMark[1]{\addtocounter{EndNoteCounter}{#1}{\color{footnote}\textsuperscript{\hyperlink{\roman{EndNoteSeries}@\roman{EndNoteCounter}}{\Abjad{EndNoteCounter}}}}\addtocounter{EndNoteCounter}{-#1}}
-\newcommand\NewNoteMark{\stepcounter{EndNoteCounter}\EndNoteMark{0}}
-\newcommand\EndNoteText[1]{\listgadd{\EndNoteCounterText}{#1}}
+\def\abjadcounter{\textsuperscript{\color{footnote}\@Abjad{\the\count255}}}
+\def\enid{ID:\the\@en@series-\the\count255}
+
+\newcommand\EndNoteMark[1][0]
+{%
+	\count255 \the\@en@count%
+	\advance\count255 #1%
+	\hyperlink{\enid}{\abjadcounter}%
+}
+
+\newcommand\NewNoteMark
+{%
+	\global\advance\@en@count 1%
+	\EndNoteMark%
+}
+\newcommand\EndNoteText[1]{\listadd{\@en@text}{#1}}
 \newcommand\EndNote[1]{\NewNoteMark\EndNoteText{#1}}
 
 \newcommand{\WriteFootnotes}
-{%
-	\ifnum\value{EndNoteCounter}>0%
-		\parskip=0pt%
-		\par%
-		\footnotesize%
-		\advance\rightskip\tabcolsep%
-		\advance\parindent-\tabcolsep%
-		\setcounter{EndNoteCounter}{0}%
-		\vskip\skip\@mpfootins%
-%		\footnoterule%
-		\color{footnote}%
-		\renewcommand*{\do}[1]{\makebox[\tabcolsep][r]{\stepcounter{EndNoteCounter}\raisebox{\ht\strutbox}{\hypertarget{\roman{EndNoteSeries}@\roman{EndNoteCounter}}{}}\textsuperscript{\Abjad{EndNoteCounter}}}##1\par}%
-		\dolistloop{\EndNoteCounterText}%
-		\gdef\EndNoteCounterText{}%
-		\setcounter{EndNoteCounter}{0}%
-		\stepcounter{EndNoteSeries}%
-	\fi%
+{
+	\ifnum\@en@count > 0
+		\vskip\parskip
+		\parskip=0pt
+		\par
+		\footnotesize
+		\advance\rightskip\tabcolsep
+		\advance\parindent-\tabcolsep
+		\color{footnote}
+		\count255 0
+		\renewcommand*{\do}[1]
+		{%
+			\advance\count255 1%
+			\hypertarget{\enid}{\makebox[1em][r]{\abjadcounter}}%
+			##1%
+			\par%
+		}
+		\renewcommand*{\do}[1]
+		{%
+			\advance\count255 1%
+			\makebox[1em][r]{\abjadcounter}%
+			\raisebox{\ht\strutbox}{\hypertarget{\enid}}%
+			##1%
+			\par%
+		}
+		\dolistloop{\@en@text}
+		\global\def\@en@text{}
+		\global\@en@count 0
+		\global\advance\@en@series 1
+	\fi
 }
 
 %ADD SPACE TO ALL ENVIRONMENTS LISTS AFTER EACH CHAPTER
@@ -356,8 +384,11 @@
 }
 
 %\setcaptionspace{Table}{\belowcaptionskip=1ex}
-%\setcaptionspace{Program}{\belowcaptionskip=-\tabcolsep}
-%\setcaptionspace{IProgram}{\belowcaptionskip=-\tabcolsep}
+\setcaptionspace{Figure}{\abovecaptionskip=\parskip}
+\setcaptionspace{Flowchart}{\abovecaptionskip=\parskip}
+
+%\setcaptionspace{Program}{\belowcaptionskip=-\parskip}
+%\setcaptionspace{IProgram}{\belowcaptionskip=-\parskip}
 
 \let\@original@Program\Program
 \let\@original@endProgram\endProgram
