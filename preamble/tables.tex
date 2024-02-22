@@ -1,4 +1,3 @@
-
 %TABLE'S COLORS
 \rowcolors{2}{environment!6}{environment!6}
 \apptocmd{\@array}{\rowcolor{environment!16}}{}{}
@@ -13,35 +12,35 @@
 \newlength\colstep
 
 \mincol=6em
-\colstep=1em
+\colstep=2em
 \tabcolsep=\parskip
 
-\newcolumntype{۱}{>{}p{			 \mincol+0\colstep	-2\tabcolsep}}
-\newcolumntype{۲}{>{}p{			 \mincol+1\colstep	-2\tabcolsep}}
-\newcolumntype{۳}{>{}p{			 \mincol+2\colstep	-2\tabcolsep}}
-\newcolumntype{۴}{>{}p{			 \mincol+3\colstep	-2\tabcolsep}}
-\newcolumntype{۵}{>{}p{0.5\hsize					-2\tabcolsep}}
+\newcolumntype{۱}{>{}p{		\mincol+0\colstep	-2\tabcolsep}}
+\newcolumntype{۲}{>{}p{		\mincol+1\colstep	-2\tabcolsep}}
+\newcolumntype{۳}{>{}p{		\mincol+2\colstep	-2\tabcolsep}}
+\newcolumntype{۴}{>{}p{		\mincol+3\colstep	-2\tabcolsep}}
+\newcolumntype{۵}{>{}p{0.5\hsize			-2\tabcolsep}}
 \newcolumntype{۶}{>{}p{\hsize	-\mincol-3\colstep	-2\tabcolsep}}
 \newcolumntype{۷}{>{}p{\hsize	-\mincol-2\colstep	-2\tabcolsep}}
 \newcolumntype{۸}{>{}p{\hsize	-\mincol-1\colstep	-2\tabcolsep}}
 \newcolumntype{۹}{>{}p{\hsize	-\mincol-0\colstep	-2\tabcolsep}}
-\newcolumntype{۰}{>{}p{\hsize					-2\tabcolsep}}
+\newcolumntype{۰}{>{}p{\hsize				-2\tabcolsep}}
 
 \newcolumntype{س}{>{}p{0.333333\hsize-2\tabcolsep}}
 
-\newcolumntype{1}{>{\english}p{			\mincol+0\colstep	-2\tabcolsep}}
-\newcolumntype{2}{>{\english}p{			\mincol+1\colstep	-2\tabcolsep}}
-\newcolumntype{3}{>{\english}p{			\mincol+2\colstep	-2\tabcolsep}}
-\newcolumntype{4}{>{\english}p{			\mincol+3\colstep	-2\tabcolsep}}
-\newcolumntype{5}{>{\english}p{0.5\hsize					-2\tabcolsep}}
+\newcolumntype{1}{>{\english}p{		\mincol+0\colstep	-2\tabcolsep}}
+\newcolumntype{2}{>{\english}p{		\mincol+1\colstep	-2\tabcolsep}}
+\newcolumntype{3}{>{\english}p{		\mincol+2\colstep	-2\tabcolsep}}
+\newcolumntype{4}{>{\english}p{		\mincol+3\colstep	-2\tabcolsep}}
+\newcolumntype{5}{>{\english}p{0.5\hsize			-2\tabcolsep}}
 \newcolumntype{6}{>{\english}p{\hsize	-\mincol-3\colstep	-2\tabcolsep}}
 \newcolumntype{7}{>{\english}p{\hsize	-\mincol-2\colstep	-2\tabcolsep}}
 \newcolumntype{8}{>{\english}p{\hsize	-\mincol-1\colstep	-2\tabcolsep}}
 \newcolumntype{9}{>{\english}p{\hsize	-\mincol-0\colstep	-2\tabcolsep}}
-\newcolumntype{0}{>{\english}p{\hsize						-2\tabcolsep}}
+\newcolumntype{0}{>{\english}p{\hsize				-2\tabcolsep}}
 
 \newcolumntype{T}{>{\english}p{0.333333\hsize-2\tabcolsep}}
 
 %CENTRALIZE TABULAR
-\preto\tabular{\par\centering}
-\appto\endtabular{\par}
+\BeforeBeginEnvironment{tabular}{\begin{center}}
+\AfterEndEnvironment{tabular}{\end{center}}
